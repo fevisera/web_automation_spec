@@ -12,7 +12,6 @@ def process_yaml(file_path, variables)
   template.render(variables)
 end
 
-# Initialize WebDriver
 options = Selenium::WebDriver::Chrome::Options.new
 driver = Selenium::WebDriver.for :chrome, options: options
 
@@ -37,6 +36,13 @@ begin
     steps.each do |step|
       step = step.transform_values { |v| Liquid::Template.parse(v).render(merged_variables) if v.is_a?(String) }
 
+      if step['frame']
+        frame_element = driver.find_element(name: step['frame'])
+        driver.switch_to.frame(frame_element)
+      else
+        driver.switch_to.default_content
+      end
+
       case step['action']
       when 'input'
         element = driver.find_element(css: step['selector'])
@@ -45,7 +51,7 @@ begin
         driver.find_element(css: step['selector']).click
       when 'wait_for'
         Selenium::WebDriver::Wait.new(timeout: step['timeout'] / 1000.0).until do
-        driver.find_element(css: step['selector'])
+          driver.find_element(css: step['selector'])
         end
       when 'navigate'
         puts "Navigating to URL: #{step['value']}"
