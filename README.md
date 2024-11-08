@@ -1,6 +1,6 @@
-# Automation Runner
+# Web Automation Specification
 
-This project automates web interactions using Selenium WebDriver and Liquid templates. The automation steps are defined in YAML files.
+This project automates web interactions using Selenium WebDriver and Liquid templates. The web automation steps are defined in YAML files.
 
 ## Prerequisites
 
